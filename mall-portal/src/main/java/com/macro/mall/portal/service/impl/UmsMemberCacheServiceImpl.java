@@ -16,19 +16,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UmsMemberCacheServiceImpl implements UmsMemberCacheService {
     @Autowired
-    private RedisService redisService;
+    private RedisService    redisService;
     @Autowired
     private UmsMemberMapper memberMapper;
     @Value("${redis.database}")
-    private String REDIS_DATABASE;
+    private String          REDIS_DATABASE;
     @Value("${redis.expire.common}")
-    private Long REDIS_EXPIRE;
+    private Long            REDIS_EXPIRE;
     @Value("${redis.expire.authCode}")
-    private Long REDIS_EXPIRE_AUTH_CODE;
+    private Long            REDIS_EXPIRE_AUTH_CODE;
     @Value("${redis.key.member}")
-    private String REDIS_KEY_MEMBER;
+    private String          REDIS_KEY_MEMBER;
     @Value("${redis.key.authCode}")
-    private String REDIS_KEY_AUTH_CODE;
+    private String          REDIS_KEY_AUTH_CODE;
 
     @Override
     public void delMember(Long memberId) {
@@ -42,7 +42,7 @@ public class UmsMemberCacheServiceImpl implements UmsMemberCacheService {
     @Override
     public UmsMember getMember(String username) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_MEMBER + ":" + username;
-        return (UmsMember) redisService.get(key);
+        return (UmsMember)redisService.get(key);
     }
 
     @Override
@@ -55,13 +55,13 @@ public class UmsMemberCacheServiceImpl implements UmsMemberCacheService {
     @Override
     public void setAuthCode(String telephone, String authCode) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + telephone;
-        redisService.set(key,authCode,REDIS_EXPIRE_AUTH_CODE);
+        redisService.set(key, authCode, REDIS_EXPIRE_AUTH_CODE);
     }
 
     @CacheException
     @Override
     public String getAuthCode(String telephone) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + telephone;
-        return (String) redisService.get(key);
+        return (String)redisService.get(key);
     }
 }
